@@ -4,7 +4,7 @@ import FavoriteBorder from '@material-ui/icons/FavoriteBorder'
 import React from 'react'
 
 
-const HeaderMenus = () => {
+const HeaderMenus = (props) => {
   return (
     <>
       <IconButton>
@@ -15,7 +15,7 @@ const HeaderMenus = () => {
       <IconButton>
         <FavoriteBorder/>
       </IconButton>
-      <IconButton>
+      <IconButton onClick={props.handleDrawerToggle}>
         <Menu/>
       </IconButton>
     </>
