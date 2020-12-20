@@ -51,7 +51,6 @@ const ImageArea = (props) => {
             props.setImages((prevState => [...prevState, newImage]))
         });
     })
-    console.log(props.images);
   }, [props.setImages])
 
   return (

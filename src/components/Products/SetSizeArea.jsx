@@ -86,7 +86,6 @@ const SetSizeArea = (props) => {
           <TableBody>
             {(props.sizes.length > 0) && (
               props.sizes.map((item, index) => {
-                console.log(props.sizes);
                 return (
                 <TableRow key={item.size}>
                   <TableCell component="th" scope="row">{item.size}</TableCell>
