@@ -32,7 +32,7 @@ const Sizetable = (props) => {
                 </TableCell>
                 <TableCell className={classes.iconCell}>
                   {size.quantity > 0 ? (
-                    <IconButton>
+                    <IconButton onClick={() => props.addProduct(size.size)}>
                       <ShoppingCartIcon/>
                     </IconButton>
                   ) : (

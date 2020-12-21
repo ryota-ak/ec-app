@@ -58,17 +58,20 @@ const ClosableDrawer = (props) => {
   ];
 
   return (
-    <nav className={classes.drawer}>
+    <nav className={classes.drawer} aria-label="mailbox folders">
       <Drawer
         container={container}
         variant="temporary"
         anchor="right"
         open={props.open}
-        onClose={props.onClose}
+        onClose={(e) => props.onClose(e, false)}
         classes={{paper: classes.drawerPaper}}
         ModalProps={{keepMounted: true}}
       >
-        <div>
+        <div
+          onClose={(e) => props.onClose(e, false)}
+          onKeyDown={(e) => props.onClose(e, false)}
+        >
           <div className={classes.serchField}>
             <TextInput
               fullWidth={false} label={"キーワードを入力"} multiline={false} required={false} rows={1} value={keyword} type={"text"} onChange={inputKeyword}
