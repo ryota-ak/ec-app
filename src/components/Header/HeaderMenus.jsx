@@ -1,6 +1,7 @@
 import { Badge, IconButton } from '@material-ui/core'
 import { Menu, ShoppingCart } from '@material-ui/icons'
 import FavoriteBorder from '@material-ui/icons/FavoriteBorder'
+import { push } from 'connected-react-router'
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { db } from '../../firebase'
@@ -47,7 +48,7 @@ const HeaderMenus = (props) => {
 
   return (
     <>
-      <IconButton>
+      <IconButton onClick={() => dispatch(push('/cart'))} >
         <Badge badgeContent={productsInCart.length} color="secondary">
           <ShoppingCart/>
         </Badge>
