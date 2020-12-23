@@ -9,9 +9,19 @@ const ProductList = () => {
   const selector = useSelector((state) => state);
   const products = getProducts(selector);
 
+  const query = selector.router.location.search;
+  const gender = /^\?gender=/.test(query) ? query.split('?gender=')[1] : "";
+  const category = /^\?category=/.test(query) ? query.split('?category=')[1] : "";
+
+  // const query = window.location.search;
+  // const gender = /^\?gender=/.test(query) ? query.split('?gender=')[1] : "";
+  // const category = /^\?category=/.test(query) ? query.split('?category=')[1] : "";
+  // console.log(query,gender, category);
+
+
   useEffect(() => {
-    dispatch(fetchProducts());
-  }, []);
+    dispatch(fetchProducts(gender, category));
+  }, [query]);
 
   return (
     <section className="c-section-wrapin">
