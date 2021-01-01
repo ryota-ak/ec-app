@@ -6,7 +6,6 @@ import { storage } from '../../firebase'
 import ImagePreview from './ImagePreview'
 import { useDispatch } from 'react-redux'
 
-
 const useStyles = makeStyles({
   icon: {
     height: 48,
@@ -17,8 +16,6 @@ const useStyles = makeStyles({
 const ImageArea = (props) => {
   const classes = useStyles();
   const dispatch = useDispatch();
-
-
 
   const deleteImage = useCallback(async (id) => {
     const ret = window.confirm('この画像を削除しますか？')

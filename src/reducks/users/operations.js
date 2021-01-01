@@ -1,6 +1,7 @@
 import { fetchOrdersHistoryAction, fetchProductsInCartAction, signInAction, signOutAction } from "./actions"
 import {push} from 'connected-react-router'
 import {auth, db, FirebaseTimestamp} from '../../firebase/index'
+import { isValidEmailFormat, isValidRequiredInput } from "../../function/common";
 
 const usersRef = db.collection('users');
 
@@ -43,7 +44,7 @@ export const listenAuthState = () => {
       if(user){
         const uid = user.uid;
 
-        db.collection('users').doc(uid).get()
+        usersRef.doc(uid).get()
           .then(snapshot => {
             const data = snapshot.data();
 
@@ -63,16 +64,16 @@ export const listenAuthState = () => {
 
 export const resetPassword = (email) => {
   return async (dispatch) => {
-    if(email === ""){
+    if(!isValidEmailFormat(email)){
       alert("必須項目が未入力です");
-      return false;
+      return;
     } else {
       auth.sendPasswordResetEmail(email)
       .then(() => {
         alert('入力されたアドレスにはパスワードリセット用のメールをお送りしました。');
         dispatch(push('/signin'));
       }).catch(() => {
-        alert('パスワードリセットに失敗しました');
+        alert('登録されていないメールアドレスです。もう一度ご確認ください。');
       })
     }
   }
@@ -81,48 +82,64 @@ export const resetPassword = (email) => {
 export const signIn = (email, password) => {
   return async (dispatch) => {
     //Validation
-    if(email === "" || password === ""){
-      alert("必須項目が未入力です");
-      return false;
-    }
+    if (!isValidRequiredInput(email, password)) {
+      alert('メールアドレスかパスワードが未入力です。');
+      return;
+  }
+  if (!isValidEmailFormat(email)) {
+      alert('メールアドレスの形式が不正です。');
+      return;
+  }
 
-    auth.signInWithEmailAndPassword(email, password)
+  return auth.signInWithEmailAndPassword(email, password)
     .then(result => {
       const user = result.user;
-
-      if(user){
-        const uid = user.uid;
-
-        db.collection('users').doc(uid).get()
-          .then(snapshot => {
-            const data = snapshot.data();
-
-            dispatch(signInAction({
-              isSignedIn: true,
-              role: data.role,
-              uid: uid,
-              username: data.username
-            }))
-
-            dispatch(push('/'));
-          })
+      if (!user) {
+        throw new Error('ユーザーIDを取得できません');
       }
+
+      const uid = user.uid;
+
+      return usersRef.doc(uid).get()
+        .then(snapshot => {
+          const data = snapshot.data();
+          if (!data) {
+            throw new Error('ユーザーデータが存在しません');
+          }
+
+          dispatch(signInAction({
+            isSignedIn: true,
+            role: data.role,
+            uid: uid,
+            username: data.username
+          }))
+
+          dispatch(push('/'));
+        })
     })
   }
 }
 
 export const signUp = (username, email, password, confirmPassword) => {
   return async (dispatch) => {
-    //Validation
-    if(username === "" || email === "" || password === "" || confirmPassword === ""){
-      alert("必須項目が未入力です");
-      return false;
-    }
+    // Validations
+    if(!isValidRequiredInput(email, password, confirmPassword)) {
+      alert('必須項目が未入力です。');
+      return;
+  }
 
-    if(password !== confirmPassword){
-      alert("パスワードが一致しません。もう一度お試し下さい");
-      return false;
-    }
+  if(!isValidEmailFormat(email)) {
+      alert('メールアドレスの形式が不正です。もう1度お試しください。')
+      return;
+  }
+  if (password !== confirmPassword) {
+      alert('パスワードが一致しません。もう1度お試しください。')
+      return;
+  }
+  if (password.length < 6) {
+      alert('パスワードは6文字以上で入力してください。')
+      return;
+  }
 
     return auth.createUserWithEmailAndPassword(email, password)
       .then(result => {
@@ -141,11 +158,15 @@ export const signUp = (username, email, password, confirmPassword) => {
             username: username
           }
 
-          db.collection('users').doc(uid).set(userInitialData)
+          usersRef.doc(uid).set(userInitialData)
             .then(() => {
               dispatch(push('/'));
             })
         }
+      })
+      .catch((error) => {
+        alert('アカウント登録に失敗しました。もう1度お試しください。');
+        throw new Error(error);
       })
   }
 }

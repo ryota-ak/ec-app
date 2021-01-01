@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useState} from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { ImageArea, SetSizeArea } from '../components/Products'
 import { PrimaryButton, SelectBox, TextInput } from '../components/UIkit'
 import { db } from '../firebase'
@@ -7,8 +7,9 @@ import { saveProduct } from '../reducks/products/operations'
 
 const ProductEdit = () => {
   const dispatch = useDispatch();
+  // const selector = useSelector(state => state);
+  // let id = selector.router.location.pathname.split('/product/edit')[1];
   let id = window.location.pathname.split('/product/edit')[1];
-
   if(id !== ""){
     id = id.split('/')[1];
   }

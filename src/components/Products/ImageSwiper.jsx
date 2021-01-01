@@ -25,7 +25,7 @@ const ImageSwiper = (props) => {
   return (
     <Swiper {...params}>
       {images.length === 0 ? (
-        <div className="p-medis__thumb">
+        <div className="p-media__thumb">
           <img src={NoImage} alt="no-image"/>
         </div>
       ) : (

@@ -91,6 +91,7 @@
     content: "";
     display: block;
     padding-top: 100%;
+    /* padding-top: 56.25%; */
 }
 
 .p-media__thumb > img {

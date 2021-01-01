@@ -49,7 +49,7 @@ const ProductCard = (props) => {
   const [anchorEl, setAnchorEl] = useState(null);
 
   const handleClick = (e) => {
-    setAnchorEl(e.currentTarget)
+    setAnchorEl(e.currentTarget);
   }
 
   const handleClose = () => {
@@ -64,7 +64,7 @@ const ProductCard = (props) => {
       <CardMedia
         className={classes.media}
         image={images[0].path}
-        title=""
+        // title=""
         onClick={() => dispatch(push(`/product/${props.id}`))}
       />
       <CardContent className={classes.content}>

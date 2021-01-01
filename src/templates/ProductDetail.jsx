@@ -39,19 +39,19 @@ const useStyles = makeStyles((theme) => ({
 
 const returnCodeToBr = (text) => {
   if (text === "") {
-      return text
+      return text;
   } else {
-      return HTMLReactParser(text.replace(/\r?\n/g, '<br/>'))
+      return HTMLReactParser(text.replace(/\r?\n/g, '<br/>'));
   }
 };
 
 const ProductDetail = () => {
-
   const classes = useStyles();
 
   const dispatch = useDispatch();
   const selector = useSelector((state) => state);
   const path = selector.router.location.pathname;
+  // const path = window.location.pathname;
   const id = path.split('/product/')[1];
 
 

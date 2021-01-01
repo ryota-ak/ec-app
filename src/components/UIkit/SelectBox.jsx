@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const SelectBox = (props) => {
+const SelectBox = React.memo((props) => {
   const classes = useStyles();
 
   return (
@@ -23,13 +23,13 @@ const SelectBox = (props) => {
         required={props.required} value={props.value}
         onChange={(e) => props.select(e.target.value)}
       >
-        {props.options.map( (option) => {
-          return <MenuItem key={option.id} value={option.id}>{option.name}</MenuItem>
-        })}
+        {props.options.map((option) => (
+          <MenuItem key={option.id} value={option.id}>{option.name}</MenuItem>
+        ))}
       </Select>
     </FormControl>
   )
-}
+})
 
 export default SelectBox
 

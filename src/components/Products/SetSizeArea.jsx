@@ -38,7 +38,7 @@ const SetSizeArea = (props) => {
   const addSize = (index, size, quantity) => {
     if(size === "" || quantity === ""){
       // Required input is blank
-      return false;
+      return;
     } else{
       if(index === props.sizes.length){
         props.setSizes(prevState => [...prevState, {size: size, quantity: quantity}]);
@@ -85,8 +85,7 @@ const SetSizeArea = (props) => {
           </TableHead>
           <TableBody>
             {(props.sizes.length > 0) && (
-              props.sizes.map((item, index) => {
-                return (
+              props.sizes.map((item, index) => (
                 <TableRow key={item.size}>
                   <TableCell component="th" scope="row">{item.size}</TableCell>
                   <TableCell>{item.quantity}</TableCell>
@@ -101,8 +100,7 @@ const SetSizeArea = (props) => {
                       </IconButton>
                   </TableCell>
                 </TableRow>
-                )
-              })
+                ))
             )}
           </TableBody>
         </Table>

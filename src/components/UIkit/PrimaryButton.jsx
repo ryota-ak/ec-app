@@ -13,14 +13,14 @@ const useStyles = makeStyles({
   }
 })
 
-const PrimaryButton = (props) => {
+const PrimaryButton = React.memo((props) => {
   const classes = useStyles();
   return (
     <Button className={classes.button} variant="contained" onClick={() => props.onClick()}>
       {props.label}
     </Button>
   )
-}
+})
 
 export default PrimaryButton
 

@@ -13,7 +13,7 @@ const useStyles = makeStyles({
   }
 });
 
-const Sizetable = (props) => {
+const SizeTable = (props) => {
   const classes = useStyles();
 
   const sizes = props.sizes;
@@ -53,5 +53,5 @@ const Sizetable = (props) => {
   )
 }
 
-export default Sizetable
+export default SizeTable
 
