@@ -53,6 +53,7 @@ const ProductDetail = () => {
   const path = selector.router.location.pathname;
   // const path = window.location.pathname;
   const id = path.split('/product/')[1];
+  // console.log(id);
 
 
   const [product, setProduct] = useState(null);
@@ -80,25 +81,31 @@ const ProductDetail = () => {
   }))
   }, [product]);
 
-  return (
-    <section className="c-section-wrapin">
-      {product && (
-        <div className="p-grid__row">
-          <div className={classes.sliderBox}>
-            <ImageSwiper images={product.images}/>
+  // /product/editの時はこのコンポーネントは表示しない
+  if(id === 'edit'){
+    return <></>
+  } else {
+    return (
+      <section className="c-section-wrapin">
+        {product && (
+          <div className="p-grid__row">
+            <div className={classes.sliderBox}>
+              <ImageSwiper images={product.images}/>
+            </div>
+            <div className={classes.detail}>
+              <h2 className="u-text__headline">{product.name}</h2>
+              <p className={classes.price}>¥{product.price.toLocaleString()}</p>
+              <div className="module-spacer--small" />
+              <SizeTable addProduct={addProduct} sizes={product.sizes}/>
+              <div className="module-spacer--small" />
+              <p>{returnCodeToBr(product.description)}</p>
+            </div>
           </div>
-          <div className={classes.detail}>
-            <h2 className="u-text__headline">{product.name}</h2>
-            <p className={classes.price}>¥{product.price.toLocaleString()}</p>
-            <div className="module-spacer--small" />
-            <SizeTable addProduct={addProduct} sizes={product.sizes}/>
-            <div className="module-spacer--small" />
-            <p>{returnCodeToBr(product.description)}</p>
-          </div>
-        </div>
-      )}
-    </section>
-  )
+        )}
+      </section>
+    )
+  }
+
 }
 
 export default ProductDetail
