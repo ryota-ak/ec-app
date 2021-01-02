@@ -47,6 +47,11 @@ const ClosableDrawer = (props) => {
     setKeyword(e.target.value);
   }, [setKeyword]);
 
+  const logout = (e) => {
+    dispatch(signOut());
+    props.onClose(e);
+  }
+
   const selectMenu = (e, path) => {
     dispatch(push(path));
     props.onClose(e);
@@ -85,13 +90,13 @@ const ClosableDrawer = (props) => {
         variant="temporary"
         anchor="right"
         open={props.open}
-        onClose={(e) => props.onClose(e, false)}
+        onClose={(e) => props.onClose(e)}
         classes={{paper: classes.drawerPaper}}
         ModalProps={{keepMounted: true}}
-      >
+        >
         <div
-          onClose={(e) => props.onClose(e, false)}
-          onKeyDown={(e) => props.onClose(e, false)}
+          // onClose={(e) => props.onClose(e)}
+          onKeyDown={(e) => props.onClose(e)}
         >
           <div className={classes.serchField}>
             <TextInput
@@ -111,7 +116,7 @@ const ClosableDrawer = (props) => {
                 <ListItemText primary={menu.label} />
               </ListItem>
             ))}
-            <ListItem button key="logout" onClick={() => dispatch(signOut())}>
+            <ListItem button key="logout" onClick={logout}>
               <ListItemIcon>
                 <ExitToIcon/>
               </ListItemIcon>

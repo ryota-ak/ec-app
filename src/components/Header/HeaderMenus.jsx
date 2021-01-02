@@ -16,6 +16,7 @@ const HeaderMenus = (props) => {
   let productsInCart = getProductsInCart(selector);
 
    // Listen products in user's cart
+   // storeの状態を更新する
    useEffect(() => {
     const unsubscribe = db.collection('users').doc(userId).collection('cart')
       .onSnapshot(snapshots => {
@@ -56,7 +57,7 @@ const HeaderMenus = (props) => {
       <IconButton>
         <FavoriteBorder/>
       </IconButton>
-      <IconButton onClick={(e) => props.handleDrawerToggle(e, true)}>
+      <IconButton onClick={(e) => props.handleDrawerToggle(e)}>
         <Menu/>
       </IconButton>
     </>
