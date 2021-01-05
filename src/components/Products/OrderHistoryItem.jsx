@@ -21,7 +21,7 @@ const dateToString = (date) => {
 const OrderHistoryItem = (props) => {
   const order = props.order;
   const orderedDatetime = datetimeToString(order.updated_at.toDate());
-  const shippingDate = dateToString(props.order.shipping_date.toDate());
+  const shippingDate = dateToString(order.shipping_date.toDate());
   const price = "¥" + order.amount.toLocaleString();
 
   return (

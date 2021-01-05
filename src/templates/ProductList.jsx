@@ -22,6 +22,7 @@ const ProductList = () => {
   useEffect(() => {
     dispatch(fetchProducts(gender, category));
   }, [query]);
+  //[query]なしでも動きそう
 
   return (
     <section className="c-section-wrapin">

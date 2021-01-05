@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }))
 
-const CartListItem = (props) => {
+const FavoriteListItem = (props) => {
     const classes = useStyles();
     const selector = useSelector(state => state);
     const uid = getUserId(selector);
@@ -35,8 +35,8 @@ const CartListItem = (props) => {
     const price = props.product.price.toLocaleString();
     const size = props.product.size;
 
-    const removeProductFromCart = (id) => {
-        return db.collection('users').doc(uid).collection('cart').doc(id).delete();
+    const removeProductFromFavorite = (id) => {
+        return db.collection('users').doc(uid).collection('favorite').doc(id).delete();
     };
 
     return (
@@ -52,7 +52,7 @@ const CartListItem = (props) => {
                     />
                     <ListItemText primary={"¥" + price} />
                 </div>
-                <IconButton onClick={() => removeProductFromCart(props.product.cartId)} >
+                <IconButton onClick={() => removeProductFromFavorite(props.product.favoriteId)} >
                     <DeleteIcon />
                 </IconButton>
             </ListItem>
@@ -61,4 +61,4 @@ const CartListItem = (props) => {
     );
 }
 
-export default CartListItem
+export default FavoriteListItem

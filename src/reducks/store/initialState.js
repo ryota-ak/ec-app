@@ -8,7 +8,8 @@ const initialState = {
     orders: [],
     role:"",
     uid: "",
-    username: ""
+    username: "",
+    favorite:[]
   }
 };
 

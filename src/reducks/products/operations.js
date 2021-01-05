@@ -23,48 +23,48 @@ export const orderProduct = (productsInCart, price) => {
       const userRef = db.collection('users').doc(uid);
       const timestamp = FirebaseTimestamp.now();
 
+      //const?
       let products = [];
       let soldOutProducts = [];
 
       const batch = db.batch();
 
       for (const product of productsInCart) {
-          const snapshot = await productsRef.doc(product.productId).get();
-          const sizes = snapshot.data().sizes;
+        const snapshot = await productsRef.doc(product.productId).get();
+        const sizes = snapshot.data().sizes;
 
-          // Create a new array of the product sizes
-          const updateSizes = sizes.map(size => {
-              if (size.size === product.size) {
-                  if (size.quantity === 0) {
-                      soldOutProducts.push(product.name);
-                      return size;
-                  }
-                  return {
-                      size: size.size,
-                      quantity: size.quantity - 1
-                  }
+        // Create a new array of the product sizes
+        const updateSizes = sizes.map(size => {
+            if (size.size === product.size) {
+                if (size.quantity === 0) {
+                  soldOutProducts.push(product.name);
+                  return size;
+                }
+                return {
+                  size: size.size,
+                  quantity: size.quantity - 1
+                }
               } else {
-                  return size
-              }
-          });
+                return size
+            }
+        });
 
-          products.push({
-              id: product.productId,
-              images: product.images,
-              name: product.name,
-              price: product.price,
-              size: product.size
-          });
+        products.push({
+          id: product.productId,
+          images: product.images,
+          name: product.name,
+          price: product.price,
+          size: product.size
+        });
 
-          batch.update(
-              productsRef.doc(product.productId),
-              {sizes: updateSizes}
-          );
+        batch.update(
+          productsRef.doc(product.productId),
+          {sizes: updateSizes}
+        );
 
-          batch.delete(
-              userRef.collection('cart').doc(product.cartId)
-          );
-
+        batch.delete(
+            userRef.collection('cart').doc(product.cartId)
+        );
       }
 
       if (soldOutProducts.length > 0) {
@@ -95,6 +95,7 @@ export const orderProduct = (productsInCart, price) => {
                   // dispatch(hideLoadingAction());
                   dispatch(push('/order/complete'))
               }).catch(() => {
+                  // modal
                   alert('注文処理に失敗しました。通信環境をご確認のうえ、もう一度お試しください。')
               })
       }

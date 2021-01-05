@@ -31,13 +31,14 @@ const OrderedProducts = (props) => {
   const products = props.products;
 
   const goToProductPage = useCallback((id) => {
-      dispatch(push('/product/'+id))
+      dispatch(push('/product/' + id))
   }, [])
 
   return (
     <List>
-      {products.map(product => (
-        <div key={product.id}>
+      {products.map((product, index) => (
+        //key={product.id}だとuniqueにならない
+        <div key={index.toString()}>
           <ListItem className={classes.list}>
             <ListItemAvatar>
               <img className={classes.image} src={product.images[0].path} alt="商品のTOP画像" />

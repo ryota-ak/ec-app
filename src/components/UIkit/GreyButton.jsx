@@ -12,14 +12,14 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
-const GreyButton = (props) => {
+const GreyButton = React.memo((props) => {
   const classes = useStyles();
   return (
     <Button className={classes.button} variant="contained" onClick={() => props.onClick()}>
       {props.label}
     </Button>
   )
-}
+})
 
 export default GreyButton
 

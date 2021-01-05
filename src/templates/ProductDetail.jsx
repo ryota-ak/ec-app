@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { ImageSwiper, SizeTable } from "../components/Products"
 import { db, FirebaseTimestamp } from '../firebase'
-import { addProductToCart } from "../reducks/users/operations"
+import { addProductToCart, addProductToFavorite } from "../reducks/users/operations"
 
 const useStyles = makeStyles((theme) => ({
   sliderBox: {
@@ -80,6 +80,21 @@ const ProductDetail = () => {
   }))
   }, [product]);
 
+  const addFavorite = useCallback((selectedSize) => {
+    const timestamp = FirebaseTimestamp.now();
+    dispatch(addProductToFavorite({
+      added_at: timestamp,
+      description: product.description,
+      gender: product.gender,
+      images: product.images,
+      name: product.name,
+      price: product.price,
+      productId: product.id,
+      quantity: 1,
+      size: selectedSize
+  }))
+  }, [product]);
+
   // /product/editの時はこのコンポーネントは表示しない
   if(id === 'edit'){
     return null;
@@ -96,7 +111,7 @@ const ProductDetail = () => {
             <h2 className="u-text__headline">{product.name}</h2>
             <p className={classes.price}>¥{product.price.toLocaleString()}</p>
             <div className="module-spacer--small" />
-            <SizeTable addProduct={addProduct} sizes={product.sizes}/>
+            <SizeTable addProduct={addProduct} sizes={product.sizes} addFavorite={addFavorite}/>
             <div className="module-spacer--small" />
             <p>{returnCodeToBr(product.description)}</p>
           </div>

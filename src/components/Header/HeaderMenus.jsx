@@ -5,8 +5,10 @@ import { push } from 'connected-react-router'
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { db } from '../../firebase'
-import { fetchProductsInCart } from '../../reducks/users/operations'
-import { getProductsInCart, getUserId } from '../../reducks/users/selectors'
+import { fetchProductsInCart, fetchProductsInFavorite } from '../../reducks/users/operations'
+import { getProductsInCart, getProductsInFavorite, getUserId } from '../../reducks/users/selectors'
+import FavoriteIcon from '@material-ui/icons/Favorite'
+import { yellow } from '@material-ui/core/colors'
 
 
 const HeaderMenus = (props) => {
@@ -14,6 +16,7 @@ const HeaderMenus = (props) => {
   const selector = useSelector((state) => state);
   const userId = getUserId(selector);
   let productsInCart = getProductsInCart(selector);
+  let productsInFavorite = getProductsInFavorite(selector);
 
    // Listen products in user's cart
    // storeの状態を更新する
@@ -47,6 +50,37 @@ const HeaderMenus = (props) => {
     return () => unsubscribe()
   }, []);
 
+   // Listen products in user's favorite
+   useEffect(() => {
+    const unsubscribe = db.collection('users').doc(userId).collection('favorite')
+      .onSnapshot(snapshots => {
+
+        snapshots.docChanges().forEach(change => {
+          const product = change.doc.data();
+          const changeType = change.type;
+
+          switch (changeType) {
+            case 'added':
+                productsInFavorite.push(product);
+                break;
+            case 'modified':
+                const index = productsInFavorite.findIndex(product => product.favoriteId === change.doc.id);
+                productsInFavorite[index] = product;
+                break;
+            case 'removed':
+                productsInFavorite = productsInFavorite.filter(product => product.favoriteId !== change.doc.id);
+                break;
+            default:
+                break;
+          }
+        });
+
+        dispatch(fetchProductsInFavorite(productsInFavorite))
+      });
+
+    return () => unsubscribe()
+  }, []);
+
   return (
     <>
       <IconButton onClick={() => dispatch(push('/cart'))} >
@@ -54,8 +88,8 @@ const HeaderMenus = (props) => {
           <ShoppingCart/>
         </Badge>
       </IconButton>
-      <IconButton>
-        <FavoriteBorder/>
+      <IconButton onClick={() => dispatch(push('/favorite'))} >
+        {(productsInFavorite.length > 0) ? <FavoriteIcon style={{ color: yellow[500] }} /> : <FavoriteBorder />}
       </IconButton>
       <IconButton onClick={(e) => props.handleDrawerToggle(e)}>
         <Menu/>
