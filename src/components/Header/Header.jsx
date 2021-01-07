@@ -3,6 +3,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import logo from '../../assets/img/icons/logo.png'
+import amazon from '../../assets/img/icons/amazon.jpg'
 import { useDispatch, useSelector } from 'react-redux'
 import { getIsSignedIn } from '../../reducks/users/selectors'
 import { push } from 'connected-react-router'
@@ -49,7 +50,7 @@ const Header = () => {
       <AppBar position="fixed" className={classes.menuBar}>
         <Toolbar className={classes.toolBar}>
           <img
-            src={logo} alt="Torahack Logo" width="128px"
+            src={amazon} alt="Torahack Logo" width="128px"
             onClick={() => dispatch(push('/'))}
           />
           {isSignedIn && (

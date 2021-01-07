@@ -55,7 +55,12 @@ const ClosableDrawer = (props) => {
   const selectMenu = (e, path) => {
     dispatch(push(path));
     props.onClose(e);
-  };
+  }
+
+  const searchKeyword = (e) => {
+      selectMenu(e, `/?search=${keyword}`);
+      setKeyword('');
+  }
 
   const [filters, setFilters] = useState([
     {func: selectMenu, label: "すべて", id: "all", value: "/"},
@@ -96,18 +101,19 @@ const ClosableDrawer = (props) => {
         >
         <div
           // onClose={(e) => props.onClose(e)}
-          onKeyDown={(e) => props.onClose(e)}
+          // onKeyDown={(e) => props.onClose(e)}
         >
           <div className={classes.serchField}>
             <TextInput
               fullWidth={false} label={"キーワードを入力"} multiline={false} required={false} rows={1} value={keyword} type={"text"} onChange={inputKeyword}
             />
-            <IconButton>
+            <IconButton
+            onClick={searchKeyword}>
               <SerchIcon />
             </IconButton>
           </div>
           <Divider />
-          <List>
+          <List onKeyDown={(e) => props.onClose(e)} >
             {menus.map( menu => (
               <ListItem button key={menu.id} onClick={(e)=>menu.func(e, menu.value)}>
                 <ListItemIcon>

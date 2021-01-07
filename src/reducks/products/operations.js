@@ -102,7 +102,7 @@ export const orderProduct = (productsInCart, price) => {
   }
 }
 
-export const fetchProducts = (gender, category) => {
+export const fetchProducts = (gender, category, keyword) => {
   return async (dispatch) => {
     let query = productsRef.orderBy('updated_at', 'desc');
     query = (gender !== "") ? query.where('gender', '==', gender) : query;
@@ -113,7 +113,18 @@ export const fetchProducts = (gender, category) => {
         const productList = [];
         snapshots.forEach(snapshot => {
           const product = snapshot.data();
-          productList.push(product);
+
+          //keyword検索
+          if(keyword){
+            const reg = new RegExp(keyword);
+            console.log(reg);
+              if(reg.test(product.name)){
+                productList.push(product);
+              }
+          } else {
+            productList.push(product);
+          }
+
         })
         dispatch(fetchProductsAction(productList));
       })

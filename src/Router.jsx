@@ -1,6 +1,6 @@
 import React from 'react';
 import {Route, Switch} from 'react-router';
-import {CartList, FavoriteList, OrderConfirm, OrderHistory, ProductDetail, ProductEdit, ProductList, Reset, SignIn, SignUp} from './templates';
+import {CartList, FavoriteList, OrderConfirm, OrderHistory, ProductDetail, ProductEdit, ProductList, Reset, SignIn, SignUp, UserMyPage} from './templates';
 import Auth from './Auth';
 
 const Router = () => {
@@ -19,6 +19,7 @@ const Router = () => {
         <Route exact path={"/favorite"} component={FavoriteList} />
         <Route exact path={"/order/confirm"} component={OrderConfirm} />
         <Route exact path={"/order/history"} component={OrderHistory} />
+        <Route exact path={"/user/mypage"} component={UserMyPage} />
       </Auth>
     </Switch>
   );

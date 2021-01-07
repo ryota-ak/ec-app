@@ -18,41 +18,41 @@ const HeaderMenus = (props) => {
   let productsInCart = getProductsInCart(selector);
   let productsInFavorite = getProductsInFavorite(selector);
 
-   // Listen products in user's cart
-   // storeの状態を更新する
-   useEffect(() => {
+  // Listen products in user's cart
+  // storeの状態を更新する
+  useEffect(() => {
+
     const unsubscribe = db.collection('users').doc(userId).collection('cart')
-      .onSnapshot(snapshots => {
+        .onSnapshot(snapshots => {
 
-        snapshots.docChanges().forEach(change => {
-          const product = change.doc.data();
-          const changeType = change.type;
+            snapshots.docChanges().forEach(change => {
+                const product = change.doc.data();
+                const changeType = change.type
 
-          switch (changeType) {
-            case 'added':
-                productsInCart.push(product);
-                break;
-            case 'modified':
-                const index = productsInCart.findIndex(product => product.cartId === change.doc.id);
-                productsInCart[index] = product;
-                break;
-            case 'removed':
-                productsInCart = productsInCart.filter(product => product.cartId !== change.doc.id);
-                break;
-            default:
-                break;
-          }
+                switch (changeType) {
+                    case 'added':
+                        productsInCart.push(product);
+                        break;
+                    case 'modified':
+                        const index = productsInCart.findIndex(product => product.cartId === change.doc.id)
+                        productsInCart[index] = product;
+                        break;
+                    case 'removed':
+                        productsInCart = productsInCart.filter(product => product.cartId !== change.doc.id);
+                        break;
+                    default:
+                        break;
+                }
+            });
+
+            dispatch(fetchProductsInCart(productsInCart))
         });
 
-        dispatch(fetchProductsInCart(productsInCart))
-      });
+//     return () => unsubscribe()
+// },[]);
 
-    return () => unsubscribe()
-  }, []);
-
-   // Listen products in user's favorite
-   useEffect(() => {
-    const unsubscribe = db.collection('users').doc(userId).collection('favorite')
+  //  Listen products in user's favorite
+    const unsubscribe2 = db.collection('users').doc(userId).collection('favorite')
       .onSnapshot(snapshots => {
 
         snapshots.docChanges().forEach(change => {
@@ -74,11 +74,14 @@ const HeaderMenus = (props) => {
                 break;
           }
         });
-
+        // console.log(productsInFavorite);
         dispatch(fetchProductsInFavorite(productsInFavorite))
       });
 
-    return () => unsubscribe()
+      return () => {
+        unsubscribe();
+        unsubscribe2();
+      }
   }, []);
 
   return (

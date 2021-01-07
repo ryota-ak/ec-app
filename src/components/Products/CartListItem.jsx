@@ -36,7 +36,7 @@ const CartListItem = (props) => {
     const size = props.product.size;
 
     const removeProductFromCart = (id) => {
-        return db.collection('users').doc(uid).collection('cart').doc(id).delete();
+            db.collection('users').doc(uid).collection('cart').doc(id).delete();
     };
 
     return (
