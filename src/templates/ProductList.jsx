@@ -23,18 +23,48 @@ const ProductList = () => {
   const selector = useSelector((state) => state);
   const products = getProducts(selector);
   const classes = useStyles();
+  //count per page
+  const perPage = 6;
 
   //pagination
   const handleChange = (event, value) => {
-    dispatch(push(`/?p=${value}`))
+    if(/^\?gender=/.test(query)){
+      dispatch(push(`/?gender=${gender}&p=${value}`));
+    }else if(/^\?category=/.test(query)){
+      dispatch(push(`/?category=${category}&p=${value}`));
+    }else if(/^\?search=/.test(query)){
+      dispatch(push(`/?search=${keyword}&p=${value}`));
+    }else{
+      dispatch(push(`/?p=${value}`));
+    }
   };
-  const perPage = 6;
 
+  //get query
   const query = selector.router.location.search;
-  const gender = /^\?gender=/.test(query) ? query.split('?gender=')[1] : "";
-  const category = /^\?category=/.test(query) ? query.split('?category=')[1] : "";
-  const keyword = /^\?search=/.test(query) ? query.split('?search=')[1] : "";
-  const page = /^\?p=/.test(query) ? parseInt(query.split('?p=')[1], 10) : 1;
+
+  //page query
+  let page = /^\?p=/.test(query) ? parseInt(query.split('?p=')[1], 10) : 1;
+
+  //gender query
+  let gender = /^\?gender=/.test(query) ? query.split('?gender=')[1] : "";
+  if(/&p=/.test(gender)){
+    page = parseInt(gender.split('&p=')[1],10);
+    gender = gender.split('&p=')[0];
+  }
+
+  //category query
+  let category = /^\?category=/.test(query) ? query.split('?category=')[1] : "";
+  if(/&p=/.test(category)){
+    page = parseInt(category.split('&p=')[1],10);
+    category = category.split('&p=')[0];
+  }
+
+  //keyword query
+  let keyword = /^\?search=/.test(query) ? query.split('?search=')[1] : "";
+  if(/&p=/.test(keyword)){
+    page = parseInt(keyword.split('&p=')[1],10);
+    keyword = keyword.split('&p=')[0];
+  }
 
 
   const productCards = products.map(product => (
@@ -43,6 +73,7 @@ const ProductList = () => {
           price={product.price} name={product.name}
       />
   ));
+  // console.log(products);
 
   useEffect(() => {
     dispatch(fetchProducts(gender, category, keyword));

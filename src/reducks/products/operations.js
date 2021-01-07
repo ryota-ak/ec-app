@@ -117,7 +117,7 @@ export const fetchProducts = (gender, category, keyword) => {
           //keyword検索
           if(keyword){
             const reg = new RegExp(keyword);
-            console.log(reg);
+            // console.log(reg);
               if(reg.test(product.name)){
                 productList.push(product);
               }
