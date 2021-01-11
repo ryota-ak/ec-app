@@ -105,8 +105,8 @@ export const orderProduct = (productsInCart, price) => {
 export const fetchProducts = (gender, category, keyword) => {
   return async (dispatch) => {
     let query = productsRef.orderBy('updated_at', 'desc');
-    query = (gender !== "") ? query.where('gender', '==', gender) : query;
-    query = (category !== "") ? query.where('category', '==', category) : query;
+    query = (gender !== undefined) ? query.where('gender', '==', gender) : query;
+    query = (category !== undefined) ? query.where('category', '==', category) : query;
 
     query.get()
       .then(snapshots => {

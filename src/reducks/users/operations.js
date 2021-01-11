@@ -159,7 +159,9 @@ export const signUp = (username, email, password, confirmPassword) => {
 
     return auth.createUserWithEmailAndPassword(email, password)
       .then(result => {
+        console.log(result);
         const user = result.user;
+        console.log(user);
 
         if(user){
           const uid = user.uid;

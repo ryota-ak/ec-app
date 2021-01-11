@@ -28,43 +28,66 @@ const ProductList = () => {
 
   //pagination
   const handleChange = (event, value) => {
-    if(/^\?gender=/.test(query)){
-      dispatch(push(`/?gender=${gender}&p=${value}`));
-    }else if(/^\?category=/.test(query)){
-      dispatch(push(`/?category=${category}&p=${value}`));
-    }else if(/^\?search=/.test(query)){
-      dispatch(push(`/?search=${keyword}&p=${value}`));
-    }else{
-      dispatch(push(`/?p=${value}`));
+    switch (true) {
+      case gender !== undefined:
+        dispatch(push(`/?gender=${gender}&p=${value}`));
+        break;
+      case category !== undefined:
+        dispatch(push(`/?category=${category}&p=${value}`));
+        break;
+      case keyword !== undefined:
+        dispatch(push(`/?search=${keyword}&p=${value}`));
+        break;
+      default:
+        dispatch(push(`/?p=${value}`));
+        break;
     }
   };
 
+  // const handleChange = (event, value) => {
+  //   if(/^\?gender=/.test(query)){
+  //     dispatch(push(`/?gender=${gender}&p=${value}`));
+  //   }else if(/^\?category=/.test(query)){
+  //     dispatch(push(`/?category=${category}&p=${value}`));
+  //   }else if(/^\?search=/.test(query)){
+  //     dispatch(push(`/?search=${keyword}&p=${value}`));
+  //   }else{
+  //     dispatch(push(`/?p=${value}`));
+  //   }
+  // };
+
   //get query
-  const query = selector.router.location.search;
+  // const query = selector.router.location.search;
 
   //page query
-  let page = /^\?p=/.test(query) ? parseInt(query.split('?p=')[1], 10) : 1;
+  // let page = /^\?p=/.test(query) ? parseInt(query.split('?p=')[1], 10) : 1;
+
+  const query = selector.router.location.query;
+  const page = query["p"] ? parseInt(query["p"]) : 1;
+  const gender = query["gender"];
+  const category = query["category"];
+  const keyword = query["search"];
 
   //gender query
-  let gender = /^\?gender=/.test(query) ? query.split('?gender=')[1] : "";
-  if(/&p=/.test(gender)){
-    page = parseInt(gender.split('&p=')[1],10);
-    gender = gender.split('&p=')[0];
-  }
+  // let gender = /^\?gender=/.test(query) ? query.split('?gender=')[1] : "";
+  // if(/&p=/.test(gender)){
+    // page = parseInt(gender.split('&p=')[1],10);
+  //   gender = gender.split('&p=')[0];
+  // }
 
   //category query
-  let category = /^\?category=/.test(query) ? query.split('?category=')[1] : "";
-  if(/&p=/.test(category)){
-    page = parseInt(category.split('&p=')[1],10);
-    category = category.split('&p=')[0];
-  }
+  // let category = /^\?category=/.test(query) ? query.split('?category=')[1] : "";
+  // if(/&p=/.test(category)){
+  //   page = parseInt(category.split('&p=')[1],10);
+  //   category = category.split('&p=')[0];
+  // }
 
   //keyword query
-  let keyword = /^\?search=/.test(query) ? query.split('?search=')[1] : "";
-  if(/&p=/.test(keyword)){
-    page = parseInt(keyword.split('&p=')[1],10);
-    keyword = keyword.split('&p=')[0];
-  }
+  // let keyword = /^\?search=/.test(query) ? query.split('?search=')[1] : "";
+  // if(/&p=/.test(keyword)){
+  //   page = parseInt(keyword.split('&p=')[1],10);
+  //   keyword = keyword.split('&p=')[0];
+  // }
 
 
   const productCards = products.map(product => (
@@ -73,7 +96,6 @@ const ProductList = () => {
           price={product.price} name={product.name}
       />
   ));
-  // console.log(products);
 
   useEffect(() => {
     dispatch(fetchProducts(gender, category, keyword));

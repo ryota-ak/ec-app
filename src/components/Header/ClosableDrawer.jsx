@@ -17,11 +17,12 @@ import { useDispatch } from 'react-redux'
 import { push } from 'connected-react-router'
 import { signOut } from '../../reducks/users/operations'
 import { db } from '../../firebase'
+import { Paper } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => ({
   drawer: {
     [theme.breakpoints.down('sm')]: {
-      flexShrink: 0,
+      // flexShrink: 0,
       width: 256
     }
   },
@@ -58,8 +59,9 @@ const ClosableDrawer = (props) => {
   }
 
   const searchKeyword = (e) => {
-      selectMenu(e, `/?search=${keyword}`);
-      setKeyword('');
+    e.preventDefault();
+    selectMenu(e, `/?search=${keyword}`);
+    setKeyword('');
   }
 
   const [filters, setFilters] = useState([
@@ -89,7 +91,7 @@ const ClosableDrawer = (props) => {
   }, []);
 
   return (
-    <nav className={classes.drawer} aria-label="mailbox folders">
+    <nav className={classes.drawer}>
       <Drawer
         container={container}
         variant="temporary"
@@ -99,19 +101,17 @@ const ClosableDrawer = (props) => {
         classes={{paper: classes.drawerPaper}}
         ModalProps={{keepMounted: true}}
         >
-        <div
+        {/* <div
           // onClose={(e) => props.onClose(e)}
           // onKeyDown={(e) => props.onClose(e)}
-        >
-          <div className={classes.serchField}>
+        > */}
+          <Paper className={classes.serchField} component="form" onSubmit={searchKeyword}>
             <TextInput
-              fullWidth={false} label={"キーワードを入力"} multiline={false} required={false} rows={1} value={keyword} type={"text"} onChange={inputKeyword}
-            />
-            <IconButton
-            onClick={searchKeyword}>
+              fullWidth={false} label={"キーワードを入力"} multiline={false} required={false} rows={1} value={keyword} type={"text"} onChange={inputKeyword} />
+            <IconButton onClick={searchKeyword} type="submit" >
               <SerchIcon />
             </IconButton>
-          </div>
+          </Paper>
           <Divider />
           <List onKeyDown={(e) => props.onClose(e)} >
             {menus.map( menu => (
@@ -137,7 +137,7 @@ const ClosableDrawer = (props) => {
               </ListItem>
             ))}
           </List>
-        </div>
+        {/* </div> */}
       </Drawer>
     </nav>
   )

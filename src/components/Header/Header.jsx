@@ -11,11 +11,11 @@ import { HeaderMenus ,ClosableDrawer} from '.'
 
 const useStyles = makeStyles({
   root: {
-    flexGrow:1,
+    // flexGrow:1,
   },
   menuBar: {
     backgroundColor: "#fff",
-    color: "#444"
+    // color: "#444"
   },
   toolBar:{
     margin:'0 auto',
@@ -23,7 +23,7 @@ const useStyles = makeStyles({
     width: '100%'
   },
   iconButtons: {
-    margin: '0 0 0 auto',
+    marginLeft: 'auto',
   }
 });
 
@@ -41,17 +41,31 @@ const Header = () => {
         return;
       }
       setSideBarOpen(sideBarOpen => !sideBarOpen);
-      // setSideBarOpen(isOpen);
       // setSideBarOpen(!sideBarOpen);
     }, [setSideBarOpen])
+
+    //トップページに戻る
+    const goBackToTop = () => {
+      dispatch(push('/'));
+      try {
+        window.scroll({
+            top: 0,
+            left: 0,
+            behavior: 'smooth',
+        });
+    } catch (error) {
+        // just a fallback for older browsers
+        window.scrollTo(0, 0);
+    }
+    }
 
   return (
     <div className={classes.root}>
       <AppBar position="fixed" className={classes.menuBar}>
         <Toolbar className={classes.toolBar}>
           <img
-            src={amazon} alt="Torahack Logo" width="128px"
-            onClick={() => dispatch(push('/'))}
+            src={amazon} alt="Logo" width="128px"
+            onClick={goBackToTop}
           />
           {isSignedIn && (
             <div className={classes.iconButtons}>

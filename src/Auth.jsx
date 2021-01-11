@@ -19,7 +19,6 @@ const Auth = ({children}) => {
   } else{
     return children
   }
-  // return children
 }
 
 export default Auth
