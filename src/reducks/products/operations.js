@@ -133,6 +133,13 @@ export const fetchProducts = (gender, category, keyword) => {
 
 export const saveProduct = (id, name, description, category, gender, price, images, sizes) => {
   return async (dispatch) => {
+    
+    //validation
+    if(name === "" || description === "" || category === "" || gender === "" || price === "" || images.length === 0 || sizes.length === 0){
+      alert('必須事項を入力してください');
+      return;
+    }
+
     const timestamp = FirebaseTimestamp.now();
 
     const data = {
@@ -142,7 +149,7 @@ export const saveProduct = (id, name, description, category, gender, price, imag
       images: images,
       name: name,
       price: parseInt(price,10),
-      sizes:sizes,
+      sizes: sizes,
       updated_at: timestamp
     }
 

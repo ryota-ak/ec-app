@@ -18,21 +18,23 @@ const ImageArea = (props) => {
   const dispatch = useDispatch();
 
   const deleteImage = useCallback(async (id) => {
+    //modalで実装
     const ret = window.confirm('この画像を削除しますか？')
     if (!ret) {
         return;
     } else {
-        const newImages = props.images.filter(image => image.id !== id)
+        const newImages = props.images.filter(image => image.id !== id);
+        //store更新
         props.setImages(newImages);
-        return storage.ref('images').child(id).delete()
+        //storage更新
+        storage.ref('images').child(id).delete();
     }
   }, [props.images])
 
-  const uploadImage = useCallback((event) => {
-    // dispatch(showLoadingAction("uploading..."))
-    const file = event.target.files;
-    let blob = new Blob(file, { type: "image/jpeg" });
+  const uploadImage = (event) => {
 
+    const file = event.target.files;
+    const blob = new Blob(file, { type: "image/jpeg" });
     // Generate random 16 digits strings
     const S="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     const N=16;
@@ -43,12 +45,13 @@ const ImageArea = (props) => {
 
     uploadTask.then(() => {
         // Handle successful uploads on complete
-        uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+        uploadTask.snapshot.ref.getDownloadURL()
+        .then((downloadURL) => {
             const newImage = {id: fileName, path: downloadURL};
             props.setImages((prevState => [...prevState, newImage]))
         });
     })
-  }, [props.setImages])
+  }
 
   return (
     <div>

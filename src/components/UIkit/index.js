@@ -6,3 +6,4 @@ export {default as GreyButton} from './GreyButton';
 export {default as TextDetail} from './TextDetail';
 export {default as Footer} from './Footer';
 export {default as ScrollToTop} from './ScrollToTop';
+export {default as SimpleModal} from './SimpleModal';

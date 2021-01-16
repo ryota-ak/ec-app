@@ -55,7 +55,7 @@ const SignUp = () => {
           onClick={() => dispatch(signUp(username, email, password, confirmPassword))}
         />
         <div className="module-spacer--medium" />
-        <p onClick={() => dispatch(push('/signin'))}>アカウントお持ちの方はこちら</p>
+        <p onClick={() => dispatch(push('/signin'))} style={{cursor:"pointer"}}>アカウントお持ちの方はこちら</p>
       </div>
     </div>
   )

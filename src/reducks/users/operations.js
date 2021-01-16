@@ -60,10 +60,10 @@ export const listenAuthState = () => {
       if(user){
         const uid = user.uid;
 
+        //storeを更新
         usersRef.doc(uid).get()
           .then(snapshot => {
             const data = snapshot.data();
-
             dispatch(signInAction({
               isSignedIn: true,
               role: data.role,
@@ -159,9 +159,7 @@ export const signUp = (username, email, password, confirmPassword) => {
 
     return auth.createUserWithEmailAndPassword(email, password)
       .then(result => {
-        console.log(result);
         const user = result.user;
-        console.log(user);
 
         if(user){
           const uid = user.uid;
@@ -192,7 +190,7 @@ export const signUp = (username, email, password, confirmPassword) => {
 export const signOut = () => {
   return async (dispatch) => {
     auth.signOut()
-    .then(() => {
+      .then(() => {
       dispatch(signOutAction());
       dispatch(push('/signin'));
     })
