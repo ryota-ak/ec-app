@@ -28,6 +28,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     padding: '16px 8px',
     textAlign: 'left',
+    justifyContent: 'space-between',
     '&:last-child': {
       paddingBottom:16
     }
@@ -50,6 +51,7 @@ const ProductCard = (props) => {
 
   const handleClick = (e) => {
     setAnchorEl(e.currentTarget);
+    // console.log(Boolean(e.currentTarget));
   }
 
   const handleClose = () => {
@@ -76,7 +78,7 @@ const ProductCard = (props) => {
             ¥{price}
           </Typography>
         </div>
-        <IconButton onClick={handleClick}>
+        <IconButton onClick={handleClick} >
           <MoreVertItem/>
         </IconButton>
         <Menu

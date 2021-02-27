@@ -1,3 +1,4 @@
+// import { push } from 'connected-react-router'
 import React, {useCallback, useEffect, useState} from 'react'
 import { useDispatch } from 'react-redux'
 import { ImageArea, SetSizeArea } from '../components/Products'
@@ -66,6 +67,7 @@ const ProductEdit = () => {
   useEffect(() => {
     db.collection('categories')
       .orderBy('order', 'asc')
+      // .onSnapshot(snapshots => {
       .get()
       .then(snapshots => {
         const list = [];

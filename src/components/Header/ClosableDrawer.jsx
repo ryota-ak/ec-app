@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Divider from '@material-ui/core/Divider'
 import Drawer from '@material-ui/core/Drawer'
 import List from '@material-ui/core/List'
@@ -34,6 +34,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     display: 'flex',
     marginLeft: 32
+
   }
 }));
 
@@ -44,9 +45,9 @@ const ClosableDrawer = (props) => {
 
   const [keyword, setKeyword] = useState("");
 
-  const inputKeyword = useCallback((e) => {
+  const inputKeyword = (e) => {
     setKeyword(e.target.value);
-  }, [setKeyword]);
+  };
 
   const logout = (e) => {
     dispatch(signOut());
@@ -64,16 +65,28 @@ const ClosableDrawer = (props) => {
     setKeyword('');
   }
 
+  // const [filters, setFilters] = useState([
+  //   {func: selectMenu, label: "すべて", id: "all", value: "/"},
+  //   {func: selectMenu, label: "メンズ", id: "male", value: "/?gender=male"},
+  //   {func: selectMenu, label: "レディース", id: "female", value: "/?gender=female"},
+  // ]);
+
+  // const menus = [
+  //   {func: selectMenu, label: "商品登録", icon: <AddCircleIcon />, id: "register", value: "/product/edit"},
+  //   {func: selectMenu, label: "注文履歴", icon: <HistoryIcon />, id: "history", value: "/order/history"},
+  //   {func: selectMenu, label: "プロフィール", icon: <PesonIcon />, id: "profile", value: "/user/mypage"}
+  // ];
+
   const [filters, setFilters] = useState([
-    {func: selectMenu, label: "すべて", id: "all", value: "/"},
-    {func: selectMenu, label: "メンズ", id: "male", value: "/?gender=male"},
-    {func: selectMenu, label: "レディース", id: "female", value: "/?gender=female"},
+    {label: "すべて", id: "all", value: "/"},
+    {label: "メンズ", id: "male", value: "/?gender=male"},
+    {label: "レディース", id: "female", value: "/?gender=female"},
   ]);
 
   const menus = [
-    {func: selectMenu, label: "商品登録", icon: <AddCircleIcon />, id: "register", value: "/product/edit"},
-    {func: selectMenu, label: "注文履歴", icon: <HistoryIcon />, id: "history", value: "/order/history"},
-    {func: selectMenu, label: "プロフィール", icon: <PesonIcon />, id: "profile", value: "/user/mypage"}
+    {label: "商品登録", icon: <AddCircleIcon />, id: "register", value: "/product/edit"},
+    {label: "注文履歴", icon: <HistoryIcon />, id: "history", value: "/order/history"},
+    {label: "プロフィール", icon: <PesonIcon />, id: "profile", value: "/user/mypage"}
   ];
 
   useEffect(() => {
@@ -84,7 +97,8 @@ const ClosableDrawer = (props) => {
         const list = [];
         snapshots.forEach(snapshot => {
           const category = snapshot.data();
-          list.push({func: selectMenu, label: category.name, id: category.id, value: `/?category=${category.id}`});
+          // list.push({func: selectMenu, label: category.name, id: category.id, value: `/?category=${category.id}`});
+          list.push({label: category.name, id: category.id, value: `/?category=${category.id}`});
         })
         setFilters(prevState => [...prevState, ...list])
       })
@@ -100,6 +114,7 @@ const ClosableDrawer = (props) => {
         onClose={(e) => props.onClose(e)}
         classes={{paper: classes.drawerPaper}}
         ModalProps={{keepMounted: true}}
+        onKeyDown={(e) => props.onClose(e)}
         >
         {/* <div
           // onClose={(e) => props.onClose(e)}
@@ -115,7 +130,8 @@ const ClosableDrawer = (props) => {
           <Divider />
           <List onKeyDown={(e) => props.onClose(e)} >
             {menus.map( menu => (
-              <ListItem button key={menu.id} onClick={(e)=>menu.func(e, menu.value)}>
+              // <ListItem button key={menu.id} onClick={(e)=>menu.func(e, menu.value)}>
+              <ListItem button key={menu.id} onClick={(e)=>selectMenu(e, menu.value)}>
                 <ListItemIcon>
                   {menu.icon}
                 </ListItemIcon>
@@ -132,7 +148,8 @@ const ClosableDrawer = (props) => {
           <Divider/>
           <List>
             {filters.map(filter => (
-              <ListItem button key={filter.id} onClick={(e) => filter.func(e, filter.value)}>
+              // <ListItem button key={filter.id} onClick={(e) => filter.func(e, filter.value)}>
+              <ListItem button key={filter.id} onClick={(e) => selectMenu(e, filter.value)}>
                 <ListItemText primary={filter.label} />
               </ListItem>
             ))}

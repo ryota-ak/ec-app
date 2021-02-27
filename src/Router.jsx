@@ -1,6 +1,6 @@
 import React from 'react';
 import {Route, Switch} from 'react-router';
-import {CartList, FavoriteList, OrderComplete, OrderConfirm, OrderHistory, ProductDetail, ProductEdit, ProductList, ProductResister, Reset, SignIn, SignUp, UserMyPage} from './templates';
+import {CartList, FavoriteList, OrderComplete, OrderConfirm, OrderHistory, ProductDetail, ProductEdit, ProductList, Reset, SignIn, SignUp, UserMyPage} from './templates';
 import Auth from './Auth';
 
 const Router = () => {

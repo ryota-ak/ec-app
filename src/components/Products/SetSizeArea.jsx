@@ -2,12 +2,23 @@ import React, { useEffect, useState } from 'react'
 import TableContainer from '@material-ui/core/TableContainer'
 import Paper from '@material-ui/core/Paper'
 import Table from '@material-ui/core/Table'
-import { IconButton, makeStyles, TableBody, TableCell, TableHead, TableRow } from '@material-ui/core'
+import { IconButton, makeStyles, Modal, TableBody, TableCell, TableHead, TableRow } from '@material-ui/core'
 import CheckCircleIcon from '@material-ui/icons/CheckCircle'
 import DeleteIcon from '@material-ui/icons/Delete'
 import EditIcon from '@material-ui/icons/Edit'
-import { SimpleModal, TextInput } from '../UIkit'
+import { TextInput } from '../UIkit'
+import { theme } from '../../assets/theme'
 
+function getModalStyle() {
+  const top = 50;
+  const left = 50;
+
+  return {
+    top: `${top}%`,
+    left: `${left}%`,
+    transform: `translate(-${top}%, -${left}%)`,
+  };
+}
 
 const useStyles = makeStyles({
   checkIcon: {
@@ -17,14 +28,27 @@ const useStyles = makeStyles({
     padding:0,
     height: 48,
     width: 48
+  },
+  modal: {
+    outline: "none",
+    position: "absolute",
+    width: 400,
+    borderRadius: 10,
+    backgroundColor: "white",
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(10),
+  },
+  text:{
+    fontSize:24,
+    // fontWeight:"bold"
   }
 })
 
 const SetSizeArea = (props) => {
   const classes = useStyles();
 
-  //alert state
-  const [open, setOpen] = useState(false);
+  //modal用state
+  const [openModal, setOpenModal] = useState(false);
   const [text, setText] = useState("");
 
   const [index, setIndex] = useState(0),//sizestableのindex
@@ -33,6 +57,7 @@ const SetSizeArea = (props) => {
 
   // const sizesCategory = ["XS","S","M","L","XL","XXL"];
   const [sizesCategory,setSizesCategory] = useState([]);
+  // const [sizesCategory,setSizesCategory] = useState(new Set());
 
   const inputSize = (e) => {
     setSize(e.target.value);
@@ -46,13 +71,15 @@ const SetSizeArea = (props) => {
     if(size === "" || quantity === 0){
       // Required input is blank
       //modal
-      setOpen(true);
+      setOpenModal(true);
       setText('必須事項を入力してください');
 
       return;
     } else {
       //サイズを大文字に
       size = size.toUpperCase();
+      //先頭0削除,小数点は切り捨て
+      quantity = Math.floor(quantity);
 
       if(index === props.sizes.length){
         //newSize
@@ -60,7 +87,7 @@ const SetSizeArea = (props) => {
         //サイズの重複をチェック
         if(sizesCategory.includes(size)){
           // modal
-          setOpen(true);
+          setOpenModal(true);
           setText('サイズが重複しています');
           return;
         }
@@ -77,7 +104,7 @@ const SetSizeArea = (props) => {
         // //サイズの重複をチェック
         if(newArray.includes(size)){
           // modal
-          setOpen(true);
+          setOpenModal(true);
           setText('サイズが重複しています');
           return;
         }
@@ -85,7 +112,7 @@ const SetSizeArea = (props) => {
         const newSizes = props.sizes;
         newSizes[index] = {size: size, quantity: quantity};
         props.setSizes(newSizes);
-        // setIndex(newSizes.length);
+        setIndex(newSizes.length);
       }
       setSize("");
       setQuantity(0);
@@ -106,6 +133,7 @@ const SetSizeArea = (props) => {
     const newSizes = props.sizes.filter((item, index) => index !== deleteIndex);
     props.setSizes(newSizes);
 
+    //サイズの種類の配列を更新["S","M",...]
     const tmpArray = sizesCategory.filter(value => value !== size)
     setSizesCategory(tmpArray);
   }
@@ -170,7 +198,13 @@ const SetSizeArea = (props) => {
           <CheckCircleIcon />
         </IconButton>
       </TableContainer>
-      <SimpleModal text={text} open={open} setOpen={setOpen} />
+
+      <Modal open={openModal} onClose={() => setOpenModal(false)}>
+        <div style={getModalStyle()} className={classes.modal}>
+          <h1 className={classes.text}>{text}</h1>
+        </div>
+      </Modal>
+
     </div>
   )
 }

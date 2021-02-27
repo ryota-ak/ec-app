@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {getProductsInCart} from "../reducks/users/selectors";
 import List from "@material-ui/core/List";
@@ -21,13 +21,13 @@ const CartList = () => {
     const selector = useSelector(state => state);
     const productsInCart = getProductsInCart(selector);
 
-    const goToOrder = useCallback(() => {
+    const goToOrder = () => {
         dispatch(push('/order/confirm'));
-    }, []);
+    };
 
-    const backToTop = useCallback(() => {
+    const backToTop = () => {
         dispatch(push('/'));
-    }, []);
+    };
 
     return (
         <section className="c-section-wrapin">

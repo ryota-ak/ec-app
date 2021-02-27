@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React from 'react';
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
@@ -30,9 +30,9 @@ const OrderedProducts = (props) => {
   const dispatch = useDispatch();
   const products = props.products;
 
-  const goToProductPage = useCallback((id) => {
+  const goToProductPage = (id) => {
       dispatch(push('/product/' + id))
-  }, [])
+  };
 
   return (
     <List>
@@ -51,7 +51,7 @@ const OrderedProducts = (props) => {
           </ListItem>
           <Divider />
         </div>
-    ))}
+      ))}
     </List>
     );
 };

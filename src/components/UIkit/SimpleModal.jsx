@@ -8,7 +8,7 @@ const useStyles = makeStyles((theme) => ({
     width: 400,
     padding: 30,
     textAlign: 'center',
-    color:'#ddd',
+    color:'#4dd0e1',
     fontWeight:'bold',
     backgroundColor: theme.palette.background.paper,
     border: '2px solid yellow',

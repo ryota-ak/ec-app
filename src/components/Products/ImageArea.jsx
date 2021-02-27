@@ -4,7 +4,6 @@ import AddPhotoAlternateIcon from '@material-ui/icons/AddPhotoAlternate'
 import { makeStyles } from '@material-ui/styles'
 import { storage } from '../../firebase'
 import ImagePreview from './ImagePreview'
-import { useDispatch } from 'react-redux'
 
 const useStyles = makeStyles({
   icon: {
@@ -15,7 +14,7 @@ const useStyles = makeStyles({
 
 const ImageArea = (props) => {
   const classes = useStyles();
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
   const deleteImage = useCallback(async (id) => {
     //modalで実装

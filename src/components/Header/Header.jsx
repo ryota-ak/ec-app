@@ -10,9 +10,6 @@ import { push } from 'connected-react-router'
 import { HeaderMenus ,ClosableDrawer} from '.'
 
 const useStyles = makeStyles({
-  root: {
-    // flexGrow:1,
-  },
   menuBar: {
     backgroundColor: "#fff",
     // color: "#444"
@@ -20,10 +17,10 @@ const useStyles = makeStyles({
   toolBar:{
     margin:'0 auto',
     maxWidth: 1024,
-    width: '100%'
+    width: '100%',
   },
   iconButtons: {
-    marginLeft: 'auto',
+    marginLeft: 'auto'
   }
 });
 
@@ -60,7 +57,7 @@ const Header = () => {
     }
 
   return (
-    <div className={classes.root}>
+    <div>
       <AppBar position="fixed" className={classes.menuBar}>
         <Toolbar className={classes.toolBar}>
           <img

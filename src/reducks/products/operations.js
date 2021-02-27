@@ -17,37 +17,53 @@ export const deleteProduct = (id) => {
 
 export const orderProduct = (productsInCart, price) => {
   return async (dispatch, getState) => {
-      // dispatch(showLoadingAction("決済処理中..."));
 
       const uid = getState().users.uid;
       const userRef = db.collection('users').doc(uid);
       const timestamp = FirebaseTimestamp.now();
 
-      //const?
-      let products = [];
-      let soldOutProducts = [];
+      //letからconstに変更
+      const products = [];
+      const soldOutProducts = [];
 
       const batch = db.batch();
 
       for (const product of productsInCart) {
         const snapshot = await productsRef.doc(product.productId).get();
+        // console.log(snapshot.data());
+        // if(!snapshot.data()){
+        //   alert(`${product.name}の在庫がありません。`);
+        //   dispatch(push('/cart'));
+        //   return;
+        // }
+
         const sizes = snapshot.data().sizes;
 
-        // Create a new array of the product sizes
-        const updateSizes = sizes.map(size => {
+        //サイズの項目があるか確認
+        const isExistSize = sizes.some(size => size.size === product.size);
+
+        let updateSizes = [];
+
+        if(isExistSize){
+          // Create a new array of the product sizes
+          updateSizes = sizes.map(size => {
             if (size.size === product.size) {
-                if (size.quantity === 0) {
-                  soldOutProducts.push(product.name);
-                  return size;
-                }
-                return {
-                  size: size.size,
-                  quantity: size.quantity - 1
-                }
-              } else {
-                return size
+              if (size.quantity === 0) {
+                soldOutProducts.push(product);
+                return size;
+              }
+              return {
+                size: size.size,
+                quantity: size.quantity - 1
+              }
+            } else {
+              return size;
             }
-        });
+          });
+        } else {
+          soldOutProducts.push(product);
+          updateSizes = sizes;
+        }
 
         products.push({
           id: product.productId,
@@ -63,14 +79,17 @@ export const orderProduct = (productsInCart, price) => {
         );
 
         batch.delete(
-            userRef.collection('cart').doc(product.cartId)
+          userRef.collection('cart').doc(product.cartId)
         );
       }
 
+      const errorArray = soldOutProducts.map(product => `${product.name}のサイズ${product.size}`);
+
       if (soldOutProducts.length > 0) {
-          const errorMessage = (soldOutProducts.length > 1) ? soldOutProducts.join('と') : soldOutProducts[0];
-          alert('大変申し訳ありません。' + errorMessage + 'が在庫切れとなったため注文処理を中断しました。');
-          return false;
+        console.log(soldOutProducts);
+        const errorMessage = (soldOutProducts.length > 1) ? errorArray.join('と') : `${soldOutProducts[0].name}のサイズ${soldOutProducts[0].size}`;
+        alert('大変申し訳ありません。' + errorMessage + 'が在庫切れとなったため注文処理を中断しました。');
+        return false;
       } else {
           batch.commit()
               .then(() => {
@@ -91,8 +110,6 @@ export const orderProduct = (productsInCart, price) => {
                   };
 
                   orderRef.set(history);
-
-                  // dispatch(hideLoadingAction());
                   dispatch(push('/order/complete'))
               }).catch(() => {
                   // modal
@@ -102,13 +119,17 @@ export const orderProduct = (productsInCart, price) => {
   }
 }
 
+//storeを更新
 export const fetchProducts = (gender, category, keyword) => {
   return async (dispatch) => {
+    //新しい順
     let query = productsRef.orderBy('updated_at', 'desc');
     query = (gender !== undefined) ? query.where('gender', '==', gender) : query;
     query = (category !== undefined) ? query.where('category', '==', category) : query;
 
-    query.get()
+    query
+      // .onSnapshot(snapshots => {
+      .get()
       .then(snapshots => {
         const productList = [];
         snapshots.forEach(snapshot => {
@@ -133,7 +154,7 @@ export const fetchProducts = (gender, category, keyword) => {
 
 export const saveProduct = (id, name, description, category, gender, price, images, sizes) => {
   return async (dispatch) => {
-    
+
     //validation
     if(name === "" || description === "" || category === "" || gender === "" || price === "" || images.length === 0 || sizes.length === 0){
       alert('必須事項を入力してください');
@@ -160,11 +181,12 @@ export const saveProduct = (id, name, description, category, gender, price, imag
       data.created_at = timestamp;
     }
 
-    return productsRef.doc(id).set(data, {merge: true})
+    productsRef.doc(id).set(data, {merge: true})
       .then(() => {
         dispatch(push('/'));
-      }).catch((error) => {
-        throw new Error(error);
+      }).catch((e) => {
+        console.error(e);
+        // throw new Error(error);
       })
   }
 }

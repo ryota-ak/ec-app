@@ -4,11 +4,13 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import {makeStyles} from "@material-ui/styles";
-import DeleteIcon from "@material-ui/icons/Delete";
 import IconButton from "@material-ui/core/IconButton";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {getUserId} from "../../reducks/users/selectors";
-import {db} from "../../firebase/index"
+import {db} from "../../firebase/index";
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import { yellow } from '@material-ui/core/colors'
+import { push } from 'connected-react-router';
 
 const useStyles = makeStyles((theme) => ({
     list: {
@@ -27,6 +29,7 @@ const useStyles = makeStyles((theme) => ({
 
 const FavoriteListItem = (props) => {
     const classes = useStyles();
+    const dispatch = useDispatch();
     const selector = useSelector(state => state);
     const uid = getUserId(selector);
 
@@ -42,7 +45,7 @@ const FavoriteListItem = (props) => {
     return (
         <>
             <ListItem className={classes.list}>
-                <ListItemAvatar>
+                <ListItemAvatar onClick={() => dispatch(push(`/product/${props.product.productId}`))}>
                     <img className={classes.image} src={image} alt="商品のTOP画像" />
                 </ListItemAvatar>
                 <div className={classes.text}>
@@ -53,7 +56,7 @@ const FavoriteListItem = (props) => {
                     <ListItemText primary={"¥" + price} />
                 </div>
                 <IconButton onClick={() => removeProductFromFavorite(props.product.favoriteId)} >
-                    <DeleteIcon />
+                    <FavoriteIcon style={{ color: yellow[500] }} />
                 </IconButton>
             </ListItem>
             <Divider />

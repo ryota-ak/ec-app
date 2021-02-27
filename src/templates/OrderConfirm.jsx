@@ -37,15 +37,15 @@ const OrderConfirm = () => {
 
     const subtotal = useMemo(() => {
         return productsInCart.reduce((sum, product) => sum += product.price, 0)
-    },[productsInCart]);
+    }, [productsInCart]);
 
     const shippingFee = useMemo(() => (subtotal >= 10000) ? 0 : 210,[subtotal]);
     const tax = useMemo(() => Math.floor(subtotal * 0.1), [subtotal]);
-    const total = useMemo(() => subtotal + shippingFee + tax,[subtotal,shippingFee,tax]);
+    const total = useMemo(() => subtotal + shippingFee + tax,[subtotal, shippingFee, tax]);
 
-    const order = useCallback(() => {
+    const order = () => {
         dispatch(orderProduct(productsInCart, total))
-    }, [productsInCart, total])
+    };
 
     return (
         <section className="c-section-wrapin">

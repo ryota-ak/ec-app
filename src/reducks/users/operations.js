@@ -11,7 +11,7 @@ export const addProductToCart = (addedProduct) => {
       const cartRef = usersRef.doc(uid).collection('cart').doc();
       addedProduct['cartId'] = cartRef.id;
       await cartRef.set(addedProduct);
-      dispatch(push('/'));
+      dispatch(push('/cart'));
   }
 }
 
@@ -21,8 +21,15 @@ export const addProductToFavorite = (addedProduct) => {
       const favoriteRef = usersRef.doc(uid).collection('favorite').doc();
       addedProduct['favoriteId'] = favoriteRef.id;
       await favoriteRef.set(addedProduct);
-      dispatch(push('/'));
-  }
+      dispatch(push('/favorite'));
+      // favoriteRef.set(addedProduct)
+      // .then(()=>{
+      //   dispatch(push('/favorite'));
+      // })
+      // .then(()=>{
+      //   alert('お気に入りに追加しました');
+      // })
+    }
 }
 
 export const fetchOrdersHistory = () => {
@@ -31,7 +38,8 @@ export const fetchOrdersHistory = () => {
       const list = [];
 
       usersRef.doc(uid).collection('orders')
-          .orderBy('updated_at', "desc").get()
+          .orderBy('updated_at', "desc")
+          .get()
           .then(snapshots => {
               snapshots.forEach(snapshot => {
                   const data = snapshot.data();
@@ -56,9 +64,10 @@ export const fetchProductsInFavorite = (products) => {
 
 export const listenAuthState = () => {
   return async (dispatch) => {
-    return auth.onAuthStateChanged(user => {
+    auth.onAuthStateChanged(user => {
       if(user){
         const uid = user.uid;
+        // console.log(auth.currentUser);
 
         //storeを更新
         usersRef.doc(uid).get()
@@ -111,6 +120,7 @@ export const signIn = (email, password) => {
     .then(result => {
       const user = result.user;
       if (!user) {
+        // alert('ユーザーデータが存在しません');
         throw new Error('ユーザーIDを取得できません');
       }
 
@@ -133,6 +143,10 @@ export const signIn = (email, password) => {
           dispatch(push('/'));
         })
     })
+    .catch((error) => {
+      alert('サインインに失敗しました。もう1度お試しください。');
+      // throw new Error(error);
+    })
   }
 }
 
@@ -148,10 +162,12 @@ export const signUp = (username, email, password, confirmPassword) => {
       alert('メールアドレスの形式が不正です。もう1度お試しください。')
       return;
   }
+
   if (password !== confirmPassword) {
       alert('パスワードが一致しません。もう1度お試しください。')
       return;
   }
+
   if (password.length < 6) {
       alert('パスワードは6文字以上で入力してください。')
       return;
@@ -182,7 +198,7 @@ export const signUp = (username, email, password, confirmPassword) => {
       })
       .catch((error) => {
         alert('アカウント登録に失敗しました。もう1度お試しください。');
-        throw new Error(error);
+        // throw new Error(error);
       })
   }
 }

@@ -1,15 +1,27 @@
+import { Modal } from "@material-ui/core"
 import {makeStyles} from "@material-ui/styles"
 import HTMLReactParser from 'html-react-parser'
 import React, { useCallback, useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { ImageSwiper, SizeTable } from "../components/Products"
 import { db, FirebaseTimestamp } from '../firebase'
 import { addProductToCart, addProductToFavorite } from "../reducks/users/operations"
 
+// function getModalStyle() {
+//   const top = 50;
+//   const left = 50;
+
+//   return {
+//     top: `${top}%`,
+//     left: `${left}%`,
+//     transform: `translate(-${top}%, -${left}%)`,
+//   };
+// }
+
 const useStyles = makeStyles((theme) => ({
   sliderBox: {
       [theme.breakpoints.down('sm')]: {
-          margin: '0 auto 24px auto',
+          margin: '0 auto 24px',
           height: 320,
           width: 320
       },
@@ -34,7 +46,20 @@ const useStyles = makeStyles((theme) => ({
   },
   price: {
     fontSize: 36
-  }
+  },
+  // modal: {
+  //   outline: "none",
+  //   position: "absolute",
+  //   width: 400,
+  //   borderRadius: 10,
+  //   backgroundColor: "white",
+  //   boxShadow: theme.shadows[5],
+  //   padding: theme.spacing(10),
+  // },
+  // text:{
+  //   fontSize:24,
+  //   // fontWeight:"bold"
+  // }
 }));
 
 const returnCodeToBr = (text) => {
@@ -45,17 +70,23 @@ const returnCodeToBr = (text) => {
   }
 };
 
-const ProductDetail = () => {
+const ProductDetail = (props) => {
   const classes = useStyles();
 
   const dispatch = useDispatch();
-  const selector = useSelector((state) => state);
-  const path = selector.router.location.pathname;
+  // const selector = useSelector((state) => state);
+  // const path = selector.router.location.pathname;
   // const path = window.location.pathname;
-  const id = path.split('/product/')[1];
+  // const id = path.split('/product/')[1];
   // console.log(id);
+  // console.log(props.match);
+  const id = props.match.params.id;
 
   const [product, setProduct] = useState(null);
+
+  //modal用state
+  // const [openModal, setOpenModal] = useState(false);
+  // const [text, setText] = useState("");
 
   useEffect(() => {
     db.collection('products').doc(id).get()
@@ -92,7 +123,7 @@ const ProductDetail = () => {
       productId: product.id,
       quantity: 1,
       size: selectedSize
-  }))
+    }))
   }, [product]);
 
   // /product/editの時はこのコンポーネントは表示しない
@@ -111,12 +142,20 @@ const ProductDetail = () => {
             <h2 className="u-text__headline">{product.name}</h2>
             <p className={classes.price}>¥{product.price.toLocaleString()}</p>
             <div className="module-spacer--small" />
-            <SizeTable addProduct={addProduct} sizes={product.sizes} addFavorite={addFavorite}/>
+            <SizeTable addProduct={addProduct} sizes={product.sizes} addFavorite={addFavorite} />
             <div className="module-spacer--small" />
             <p>{returnCodeToBr(product.description)}</p>
+            {/* <p>{product.description}</p> */}
           </div>
         </div>
       )}
+
+      {/* <Modal open={openModal} onClose={() => setOpenModal(false)}>
+        <div style={getModalStyle()} className={classes.modal}>
+          <h1 className={classes.text}>{text}</h1>
+        </div>
+      </Modal> */}
+
     </section>
   )
 

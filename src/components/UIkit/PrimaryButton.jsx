@@ -1,6 +1,6 @@
 import React from 'react'
 import Button from '@material-ui/core/Button'
-import {makeStyles} from '@material-ui/styles';
+import {makeStyles} from '@material-ui/styles'
 
 const useStyles = makeStyles({
   "button": {
@@ -16,7 +16,7 @@ const useStyles = makeStyles({
 const PrimaryButton = React.memo((props) => {
   const classes = useStyles();
   return (
-    <Button className={classes.button} variant="contained" onClick={() => props.onClick()}>
+    <Button className={classes.button} variant="contained" onClick={props.onClick}>
       {props.label}
     </Button>
   )

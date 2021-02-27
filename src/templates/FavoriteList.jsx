@@ -23,6 +23,8 @@ const FavoriteList = () => {
     const selector = useSelector(state => state);
     const productsInFavorite = getProductsInFavorite(selector);
 
+    // console.log(productsInFavorite);
+
     const backToTop = useCallback(() => {
         dispatch(push('/'));
     }, []);
